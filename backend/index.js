@@ -2,10 +2,14 @@ import express from "express";
 import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import cors from "cors";
+import { config } from "dotenv";
 
 import postRoutes from "./routes/posts.js";     // The `router` that we'll need for our routing 
 
 const app = express();
+
+// A function from the `dotenv` package. Used for finding the environment variables inside the .env file
+config({ path: '.env' });
 
 // This is using express middleware to connect our routes to our app. The `/posts` is specified as being the starting path for all the routes for our `server/posts.js` file.
 // So, anything that deals with post objects will start as http://localhost:5000/posts. The second param is setting the routes
@@ -20,8 +24,11 @@ app.use(bodyParser.urlencoded({limit: "30mb", extended: true}));
 // Setting up `cors`
 app.use(cors());
 
-// Setting up the application to use MongoDB 
-const CONNECTION_URL = "mongodb+srv://<username>:<password>@my-cluster.j4zsd.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+// Setting up the application to use MongoDB
+const USERNAME = process.env.USER;
+const PASSWORD = process.env.PASS;
+const CONNECTION_URL = `mongodb+srv://${USERNAME}:${PASSWORD}@my-cluster.j4zsd.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
+// const CONNECTION_URL = `mongodb+srv://${process.env.USERNAME}:${process.env.PASSWORD}@my-cluster.j4zsd.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 const PORT = process.env.PORT || 5000;
 
 // Using `mongoose` to connect our app to the DB. The snippet requires two params: 1). the connection URL; 2). an object w/ all the options - NOTE: the two options used are NOT
