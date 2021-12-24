@@ -21,7 +21,7 @@ app.use(bodyParser.urlencoded({limit: "30mb", extended: true}));
 app.use(cors());
 
 // Setting up the application to use MongoDB 
-const CONNECTION_URL = "mongodb+srv://Testing:TheDotGitIgnore@my-cluster.j4zsd.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+const CONNECTION_URL = "mongodb+srv://<username>:<password>@my-cluster.j4zsd.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
 const PORT = process.env.PORT || 5000;
 
 // Using `mongoose` to connect our app to the DB. The snippet requires two params: 1). the connection URL; 2). an object w/ all the options - NOTE: the two options used are NOT
