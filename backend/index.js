@@ -9,7 +9,7 @@ import postRoutes from "./routes/posts.js";     // The `router` that we'll need 
 const app = express();
 
 // A function from the `dotenv` package. Used for finding the environment variables inside the .env file
-config({ path: '.env' });
+config({ path: '../.env' });
 
 // This is using express middleware to connect our routes to our app. The `/posts` is specified as being the starting path for all the routes for our `server/posts.js` file.
 // So, anything that deals with post objects will start as http://localhost:3080/posts. The second param is setting the routes
@@ -26,7 +26,7 @@ app.use(cors());
 
 // Setting up the application to use MongoDB
 const CONNECTION_URL = process.env.DB_URI;
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.CONNECTION_PORT || 5000;
 
 // Using `mongoose` to connect our app to the DB. The snippet requires two params: 1). the connection URL; 2). an object w/ all the options - NOTE: the two options used are NOT
 // required, but the terminal will display some non-sensical error/warning messages, so it's good practice to include them. The snippet returns a Promise, so we'll need to chain
