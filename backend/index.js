@@ -11,10 +11,6 @@ const app = express();
 // A function from the `dotenv` package. Used for finding the environment variables inside the .env file
 config({ path: '../.env' });
 
-// This is using express middleware to connect our routes to our app. The `/posts` is specified as being the starting path for all the routes for our `server/posts.js` file.
-// So, anything that deals with post objects will start as http://localhost:3080/posts. The second param is setting the routes
-app.use("/posts", postRoutes);
-
 // Setting up `bodyParser` so we can appropriately send requests. These two lines are somewhat specific to this app: bodyParser is a needed/useful package for MERN apps, but
 // the `{limit: "30mb", extended: true}` values are specific to this app. `limit: "30mb"` is used for the images that will be sent inside of the requests; images can be 
 // fairly large in size
@@ -23,6 +19,11 @@ app.use(bodyParser.urlencoded({limit: "30mb", extended: true}));
 
 // Setting up `cors`
 app.use(cors());
+
+// This is using express middleware to connect our routes to our app. The `/posts` is specified as being the starting path for all the routes for our `server/posts.js` file.
+// So, anything that deals with post objects will start as http://localhost:${REACT_APP_CONNECTION_PORT}/posts. The second param is setting the routes. This must be defined under
+// `app.use(cors())` so that we do not get an error when working in the DOM
+app.use("/posts", postRoutes);
 
 // Setting up the application to use MongoDB
 const CONNECTION_PORT = process.env.REACT_APP_CONNECTION_PORT || 5000;
