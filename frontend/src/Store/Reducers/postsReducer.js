@@ -1,14 +1,10 @@
-const initialState = {
-    posts: []
-}
-
-export const postsReducer = (state = initialState, action) => {
+export const postsReducer = (posts = [], action) => {
     switch(action.type) {
         case "FETCH_ALL":
             return action.payload;
         case "CREATE":
-            return state;
+            return [...posts, action.payload];
         default:
-            return state;
+            return posts;
     }
 }

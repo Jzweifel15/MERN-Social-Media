@@ -14,3 +14,14 @@ export const getPosts = () => async (dispatch) => {
     // const action = { type: "FETCH_ALL", payload: [] }
     // dispatch(action);
 }
+
+export const createPost = (post) => async (dispatch) => {
+    try {
+        const { data } = await api.createPost(post);    // This is making a POST API request to our backend server
+
+        dispatch({ type: "CREATE", payload: data });
+    }
+    catch(error) {
+        console.log(error.message);
+    }
+}
