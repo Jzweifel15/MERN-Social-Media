@@ -6,6 +6,7 @@ import mongoose from "mongoose";
 const postSchema = mongoose.Schema({
     title: String,
     message: String,
+    creator: String,
     tags: [String],             // The square brackets (`[]`) specify an array, so here we'll have an array of Strings
     selectedFile: String,
     likeCount: {                // The curly brackets (`{}`) allow us to specify additional info for a specific field

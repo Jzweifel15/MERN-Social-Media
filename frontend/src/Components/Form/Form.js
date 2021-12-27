@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { TextField, Button, Typography, Paper } from "@material-ui/core";
 import FileBase from "react-file-base64";
-import { useDispatch } from "react-redux";
-import { createPost } from "../../Store/Actions/posts";
+import { useDispatch, useSelector } from "react-redux";
+import { createPost, updatePost } from "../../Store/Actions/posts";
 import useStyles from "./styles";
 
-const Form = () => {
-    const [postData, setPostData] = useState({
+const Form = ({ currentId, setCurrentId }) => {
+    const [state, setState] = useState({
         creator: "",
         title: "",
         message: "",
@@ -14,43 +14,61 @@ const Form = () => {
         selectedFile: ""
     });
 
+    const post = useSelector((state) => currentId ? state.posts.find((p) => p._id === currentId) : null);
+
     const dispatch = useDispatch();
+
+    useEffect(() => {       // Used for repopulating the form with the info of a post when we're wanting to update the info of the post
+        if(post) setState(post);
+    }, [post]);
 
     const classes = useStyles();
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        dispatch(createPost(postData));
+
+        if(currentId) {
+            dispatch(updatePost(currentId, state));
+        }
+        else {
+            dispatch(createPost(state));  
+        }
+        clear();
+    }
+
+    const handleChange = (event) => {
+        setState({ ...state, [event.target.name]: event.target.value })
     }
 
     const clear = () => {
-
+        setCurrentId(null);
+        setState({ creator: "", title: "", message: "", tags: "", selectedFile: "" });
     }
 
     return (
-        <Paper className={classes.paper}>
-            <form className={`${classes.root} ${classes.form}`} autoComplete="off" noValidate onSubmit={handleSubmit}>
-                <Typography variant="h6">Creating a Memory</Typography>
+        <Paper className={ classes.paper }>
+            <form className={ `${classes.root} ${classes.form}` } autoComplete="off" noValidate onSubmit={ handleSubmit }>
+                <Typography variant="h6">{ currentId ? "Editing a Memory" : "Creating a Memory" }</Typography>
                 <TextField name="creator" variant="outlined" 
                            label="Creator" fullWidth
-                           value={postData.creator} onChange={(event) => setPostData({ ...postData, creator: event.target.value })} />
+                           value={ state.creator } onChange={ handleChange } />
                 <TextField name="title" variant="outlined" 
                            label="Title" fullWidth
-                           value={postData.title} onChange={(event) => setPostData({ ...postData, title: event.target.value })} />
+                           value={ state.title } onChange={ handleChange } />
                 <TextField name="message" variant="outlined" 
                            label="Message" fullWidth
-                           value={postData.message} onChange={(event) => setPostData({ ...postData, message: event.target.value })} />
+                           value={ state.message } onChange={ handleChange } />
                 <TextField name="tags" variant="outlined" 
                            label="Tags" fullWidth
-                           value={postData.tags} onChange={(event) => setPostData({ ...postData, tags: event.target.value })} />
-                <div className={classes.fileInput}>
+                           value={ state.tags } onChange={ handleChange } />
+                <div className={ classes.fileInput }>
                     <FileBase type="file" multiple={false}
-                              onDone={({ base64 }) => setPostData({ ...postData, selectedFile: base64 })} />
+                              onDone={({ base64 }) => setState({ ...state, selectedFile: base64 })} />
                 </div>
-                <Button className={classes.buttonSubmit} variant="contained" color="primary" size="large" type="submit" fullWidth>
+                <Button className={ classes.buttonSubmit } variant="contained" color="primary" size="large" type="submit" fullWidth>
                     Submit
                 </Button>
-                <Button variant="contained" color="secondary" size="small" onClick={clear} fullWidth>
+                <Button variant="contained" color="secondary" size="small" onClick={ clear } fullWidth>
                     Clear
                 </Button>
             </form>
