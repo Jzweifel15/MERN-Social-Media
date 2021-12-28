@@ -25,14 +25,12 @@ app.use(cors());
 // `app.use(cors())` so that we do not get an error when working in the DOM
 app.use("/posts", postRoutes);
 
-// Setting up the application to use MongoDB
-const CONNECTION_PORT = process.env.REACT_APP_CONNECTION_PORT || 5000;
-
+// Setting up the application to use MongoDBS
 // Using `mongoose` to connect our app to the DB. The snippet requires two params: 1). the connection URL; 2). an object w/ all the options - NOTE: the two options used are NOT
 // required, but the terminal will display some non-sensical error/warning messages, so it's good practice to include them. The snippet returns a Promise, so we'll need to chain
 // `.then()` and `.catch()`
 mongoose.connect(process.env.DB_URI, {useNewUrlParser: true, useUnifiedTopology: true})
-    .then(() => app.listen(CONNECTION_PORT, () => console.log(`Server running on port: ${ CONNECTION_PORT }`)))       // `app.listen` requires 1). the port that we specified; 2). a func to be ran when the app successfully listens
+    .then(() => app.listen(process.env.CONNECTION_PORT, () => console.log(`Server running on port: ${ process.env.CONNECTION_PORT }`)))       // `app.listen` requires 1). the port that we specified; 2). a func to be ran when the app successfully listens
     .catch((error) => console.log(error.message));
 
 // mongoose.set("useFindAndModify", false);  This line was mentioned in the tutorial video; it would have also ensured that we don't get any weird errors/warnings inside of the terminal, however according to
