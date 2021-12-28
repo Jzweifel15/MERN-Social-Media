@@ -1,6 +1,6 @@
 import express from "express";
 
-import { getPosts, createPost, updatePost } from "../controllers/posts.js";    // importing our `server/controllers/posts.js` `getPosts` handler
+import { getPosts, createPost, updatePost, likePost } from "../controllers/posts.js";    // importing our `server/controllers/posts.js` `getPosts` handler
 
 const router = express.Router();
 
@@ -15,6 +15,7 @@ router.post("/", createPost);
 // be `/:id` which the `:` indicates the URL pattern is dynamic and the `id` portion will be the unique ID of the data we're 
 // trying to update, and as a second param a func we wanted to call/perform when a PATCH request is made
 router.patch("/:id", updatePost);
+router.patch("/:id/likePost", likePost);
 
 // Will always need to export the whole `router` so that we can import and use it in our `server/index.js` file
 export default router;

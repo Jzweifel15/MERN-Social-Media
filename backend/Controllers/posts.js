@@ -41,12 +41,24 @@ export const updatePost = async (request, response) => {
     const { id: _id } = request.params;
     const post = request.body;      // It is in the `request.body` that we're recieving the updates from the Form
 
-    if(!mongoose.Types.ObjectId.isValid(_id)) return response.status(404).send("No post with that ID");     // Checks if the `_id` is valid
+    if(!mongoose.Types.ObjectId.isValid(_id)) return response.status(404).send(`No post with that ID: ${_id}`);     // Checks if the `_id` is valid
     
     // If the ID is valid, the asynchronous `findByIdAndUpdate()` method is called. The method takes _ params: 1). The id (_id); 
     // 2). The updated data (in this case, post, which we need to spread with the _id); 3). The value `{ new: true }` so that we 
     // can actually receive the updated version of the post. Also, since it's an async func, the `await` keyword needs to go infront of it
-    const updatedPost = await PostMessage.findByIdAndUpdate(_id, { ...post, _id }, { new: true });
+    const updatedPost = { ...post, _id }
+    await PostMessage.findByIdAndUpdate(_id, updatedPost, { new: true });
+
+    response.json(updatedPost);
+}
+
+export const likePost = async (request, response) => {
+    const { id: _id } = request.params;
+
+    if(!mongoose.Types.ObjectId.isValid(_id)) return response.status(404).send(`No post with that ID: ${_id}`);
+
+    const post = await PostMessage.findById(_id);
+    const updatedPost = await PostMessage.findByIdAndUpdate(_id, { likeCount: post.likeCount + 1 }, { new: true });
 
     response.json(updatedPost);
 }
