@@ -62,4 +62,14 @@ export const likePost = async (request, response) => {
     response.json(updatedPost);
 }
 
+export const deletePost = async (request, response) => {
+    const { id: _id } = request.params;
+
+    if(!mongoose.Types.ObjectId.isValid(_id)) return response.status(404).send(`No post with that ID: ${_id}`);
+
+    await PostMessage.findByIdAndDelete(_id);
+
+    response.json({ message: "Post has successfully been deleted"});
+}
+
 export default router;
