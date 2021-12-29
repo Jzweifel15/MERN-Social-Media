@@ -14,7 +14,6 @@ const router = express.Router();
 export const getPosts = async (request, response) => {
     try {
         const postMessages = await PostMessage.find();
-        console.log(postMessages);
 
         response.status(200).json(postMessages);
     }
@@ -43,7 +42,7 @@ export const updatePost = async (request, response) => {
 
     if(!mongoose.Types.ObjectId.isValid(_id)) return response.status(404).send(`No post with that ID: ${_id}`);     // Checks if the `_id` is valid
     
-    // If the ID is valid, the asynchronous `findByIdAndUpdate()` method is called. The method takes _ params: 1). The id (_id); 
+    // If the ID is valid, the asynchronous `findByIdAndUpdate()` method is called. The method takes 3 params: 1). The id (_id); 
     // 2). The updated data (in this case, post, which we need to spread with the _id); 3). The value `{ new: true }` so that we 
     // can actually receive the updated version of the post. Also, since it's an async func, the `await` keyword needs to go infront of it
     const updatedPost = { ...post, _id }
