@@ -1,12 +1,13 @@
 import express from "express";
 
-import { getPosts, createPost, updatePost, likePost, deletePost } from "../controllers/posts.js";    // importing our `server/controllers/posts.js` `getPosts` handler
+import { getPosts, createPost, updatePost, likePost, deletePost, getPost } from "../controllers/posts.js";    // importing our `server/controllers/posts.js` `getPosts` handler
 
 const router = express.Router();
 
 // This is the basic setup of a route. The `get()` func is used for making a GET request and takes two params: 1). The URL pattern;
 // 2). A function to be executed if the GET request is successful - this func always accepts a `request` and `response` param
 router.get("/", getPosts);
+router.get("/:id", getPost);
 
 // The `post()` func is used for POST requests and accepts the same params as the `get()` func.
 router.post("/", createPost);

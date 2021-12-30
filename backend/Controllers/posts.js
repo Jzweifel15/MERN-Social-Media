@@ -22,6 +22,20 @@ export const getPosts = async (request, response) => {
     }
 }
 
+// API request for retrieving a single post from the server
+export const getPost = async (request, response) => {
+    const { id: _id } = request.params;
+
+    try {
+        const post = await PostMessage.findById(_id);
+
+        response.status(200).json(post);
+    }
+    catch (error) {
+        response.status(404).json({ message: error.message });
+    }
+}
+
 export const createPost = async (request, response) => {
     const { title, message, selectedFile, creator, tags } = request.body;
     const newPost = new PostMessage({ title, message, selectedFile, creator, tags });
