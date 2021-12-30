@@ -14,7 +14,7 @@ const Form = ({ currentId, setCurrentId }) => {
         selectedFile: ""
     });
 
-    const post = useSelector((state) => currentId ? state.posts.find((p) => p._id === currentId) : null);
+    const post = useSelector((state) => (currentId ? state.posts.find((p) => p._id === currentId) : null));
 
     const dispatch = useDispatch();
 
@@ -27,12 +27,13 @@ const Form = ({ currentId, setCurrentId }) => {
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        if(currentId) {
-            dispatch(updatePost(currentId, state));
+        if(currentId === 0) {
+            dispatch(createPost(state));
         }
         else {
-            dispatch(createPost(state));  
+            dispatch(updatePost(currentId, state));  
         }
+
         clear();
     }
 
@@ -41,7 +42,7 @@ const Form = ({ currentId, setCurrentId }) => {
     }
 
     const clear = () => {
-        setCurrentId(null);
+        setCurrentId(0);
         setState({ creator: "", title: "", message: "", tags: "", selectedFile: "" });
     }
 
